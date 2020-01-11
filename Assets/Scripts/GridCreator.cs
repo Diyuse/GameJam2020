@@ -12,7 +12,7 @@ public class GridCreator : MonoBehaviour
     [SerializeField] private Transform origin;
     private static GameObject grid;
     [SerializeField] public static float tileSize;
-    [SerializeField] public static int gridSize;
+    [SerializeField] public static int gridSize;    
     [Header("Starting Position")]
     [SerializeField] public static int startingRow;
     [SerializeField] public static int startingCol; 
