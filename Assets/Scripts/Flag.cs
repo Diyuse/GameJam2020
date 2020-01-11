@@ -53,8 +53,9 @@ public class Flag
         collected = true;
 
         // Make the flag invisible, animation is welcome
-        this.flagGameObject.SetActive(false);
-
+        this.flagGameObject.GetComponent<Renderer>().enabled = false;
+        Debug.Log("In collect flag");
+        
         return true;
     }
 }

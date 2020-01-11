@@ -155,7 +155,8 @@ public class PlayerController : MonoBehaviour
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
-            flag.CollectFlag();
+            if(!flag.CollectFlag())
+                Debug.Log("Cannot remove flag");
         }
 
         // check if won
