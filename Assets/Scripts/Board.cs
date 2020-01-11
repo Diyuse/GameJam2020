@@ -12,19 +12,11 @@ public class Board : MonoBehaviour
     public bool boardIsFlipped;
 
     [Header("Grid Setup")]
-<<<<<<< HEAD:Assets/Scripts/GridCreator.cs
-    [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private Transform origin;
-    private static GameObject grid;
-    [SerializeField] public static float tileSize;
-    [SerializeField] public static int gridSize;    
-=======
     [SerializeField] public GameObject tilePrefab;
     [SerializeField] public Transform origin;
     private GameObject grid;
     [SerializeField] public float tileSize;
     [SerializeField] public int gridSize;
->>>>>>> master:Assets/Scripts/Board.cs
     [Header("Starting Position")]
     [SerializeField] public int startingRow;
     [SerializeField] public int startingCol; 
