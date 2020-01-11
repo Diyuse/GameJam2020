@@ -18,7 +18,7 @@
         currentStatus = status;
     }
 
-    public void setStatus(TileStatus status)
+    public void SetStatus(TileStatus status)
     {
         currentStatus = status;
     }

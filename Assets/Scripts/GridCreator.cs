@@ -3,21 +3,28 @@ using UnityEngine;
 
 public class GridCreator : MonoBehaviour
 {
-    private GameObject[,] myGrid;
-    private Tile[,] myTiles;
+    public static GameObject[,] myGrid;
+    public static Tile[,] myTiles;
+    public static bool boardIsFlipped;
     [Header("Grid Setup")]
     [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private float tileSize;
     [SerializeField] private Transform origin;
-    [SerializeField] private int gridSize;
+    [SerializeField] public static float tileSize;
+    [SerializeField] public static int gridSize;
     [Header("Starting Position")]
-    [SerializeField] private int startingRow;
-    [SerializeField] private int startingCol;
+    [SerializeField] public static int startingRow;
+    [SerializeField] public static int startingCol;
     [Header("Ending Position")]
     [SerializeField] private int endRow;
     [SerializeField] private int endCol;
+    [Header("Others")] [SerializeField] private GameObject player;
     private void Awake()
     {
+        boardIsFlipped = false;
+        gridSize = 8;
+        tileSize = 1;
+        startingRow = 0;
+        startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         
@@ -42,29 +49,27 @@ public class GridCreator : MonoBehaviour
                 //Can just instantiate here and construct it with the instantiate object
             }
         }
-        
-        // myGrid[0,0].transform.Translate(0,-1,0);
+
+        //Setting the starting position of the player
+        player.transform.position = origin.position + new Vector3(startingRow, tileSize+1, startingCol);
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            lowerTile(4,4);
-        }
-    }
-
-    public void lowerTile(int row, int col)
+    public static void LowerTile(int row, int col)
     {
         if (myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
         {
             myGrid[row,col].transform.Translate(0,-tileSize,0);
-            myTiles[row, col].setStatus(Tile.TileStatus.CHANGED);
+            myTiles[row, col].SetStatus(Tile.TileStatus.CHANGED);
         } else if (myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
         {
             myGrid[row,col].transform.Translate(0,tileSize,0);
-            myTiles[row, col].setStatus(Tile.TileStatus.UNCHANGED);
+            myTiles[row, col].SetStatus(Tile.TileStatus.UNCHANGED);
         }
     }
-    
+
+    public static void Flip()
+    {
+        Debug.Log("Board has been flipped");
+    }
+
 }
