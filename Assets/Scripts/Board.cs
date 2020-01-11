@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+public class Board : MonoBehaviour
 {
     
     // References to the tiles
@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour
     public bool boardIsFlipped;
 
     [Header("Grid Setup")]
-    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] public GameObject tilePrefab;
     [SerializeField] public Transform origin;
     private GameObject grid;
     [SerializeField] public float tileSize;
@@ -21,10 +21,14 @@ public class Grid : MonoBehaviour
     [SerializeField] public int startingRow;
     [SerializeField] public int startingCol; 
     [Header("Others")] 
-    [SerializeField] private GameObject player;
+    [SerializeField] public GameObject player;
     [SerializeField] public GameObject flagPrefab;
 
     private Vector3 position;
+
+    // Flags
+    private const int NUMBER_OF_FLAGS = 2;
+    public Flag[] flags = new Flag[NUMBER_OF_FLAGS];
 
     /// <summary>
     /// Creates a hard-coded grid
@@ -66,6 +70,9 @@ public class Grid : MonoBehaviour
         
         Flag firstFlag = new Flag(7,7,Flag.FlagStatus.UP, this);
         Flag secondFlag = new Flag(0,0,Flag.FlagStatus.DOWN, this);
+
+        flags[0] = firstFlag;
+        flags[1] = secondFlag;
 
         //Setting the starting position of the player
         player.transform.position = origin.position + new Vector3(startingRow, tileSize+1, startingCol);
