@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     private float tileSize;
     private int gridSize;
 
-    private Grid grid;
+    private Board grid;
     public GameObject gridGameObject;
 
     private PlayerController playerController;
@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         playerController = player.GetComponent<PlayerController>();
-        grid = gridGameObject.GetComponent<Grid>();
+        grid = gridGameObject.GetComponent<Board>();
 
         // Choose random starting coord
         System.Random rand = new System.Random();
