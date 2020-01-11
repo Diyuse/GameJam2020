@@ -12,17 +12,17 @@ public class PlayerController : MonoBehaviour
     private float tileSize;
     private bool justFlipped;
 
-    private Grid grid;
-    public GameObject gridGameObject;
+    private Board board;
+    public GameObject boardGameObject;
 
     private void Start()
     {
-        grid = gridGameObject.GetComponent<Grid>();
+        board = boardGameObject.GetComponent<Board>();
 
-        row = grid.startingRow;
-        col = grid.startingCol;
-        gridSize = grid.gridSize;
-        tileSize = grid.tileSize;
+        row = board.startingRow;
+        col = board.startingCol;
+        gridSize = board.gridSize;
+        tileSize = board.tileSize;
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
                 //When w is pressed, check if the player is within the grid
                 TileRemoval(); // Check if the tile will be removed and does it
                 transform.Translate(-tileSize,0,0); //Move the player by the same amount as the tile size
-                grid.LowerTile(row, col); //Lower the tile of the original position
+                board.LowerTile(row, col); //Lower the tile of the original position
                 row--; //Keep track of the position of the player
             }
         } else if (Input.GetKeyDown("a") && col > 0)
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(0, 0, -tileSize);
-                grid.LowerTile(row, col);
+                board.LowerTile(row, col);
                 col--;
             }
         } else if (Input.GetKeyDown("s") && row < gridSize - 1)
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(tileSize, 0, 0);
-                grid.LowerTile(row, col);
+                board.LowerTile(row, col);
                 row++;
             }
         } else if (Input.GetKeyDown("d") && col < gridSize - 1)
@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(0, 0, tileSize);
-                grid.LowerTile(row, col);
+                board.LowerTile(row, col);
                 col++;
             }
         }
@@ -70,10 +70,10 @@ public class PlayerController : MonoBehaviour
         //Flip
         if (Input.GetKeyDown("space"))
         {
-            if (grid.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
             {
-                grid.Flip();
-                grid.LowerTile(row, col);
+                board.Flip();
+                board.LowerTile(row, col);
                 justFlipped = true;
             }
         }
@@ -87,9 +87,9 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private bool CheckIfValidMove(int row, int col)
     {
-        if (grid.boardIsFlipped)
+        if (board.boardIsFlipped)
         {
-            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
+            if (board.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
             {
                 return true;
             }
@@ -97,9 +97,9 @@ public class PlayerController : MonoBehaviour
             {
                 return false;
             }
-        }else if (!grid.boardIsFlipped)
+        }else if (!board.boardIsFlipped)
         {
-            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
+            if (board.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
             {
                 return true;
             }
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (justFlipped)
         {
-            grid.DeleteTile(row, col);
+            board.DeleteTile(row, col);
             justFlipped = false;
         }
     }
@@ -143,6 +143,13 @@ public class PlayerController : MonoBehaviour
     /// Check if the player is on a flag
     /// </summary>
     public bool IsOnFlag(){
-        return true;
+
+        foreach(Flag f in board.flags){
+            if (f.Col == this.col && f.Row == this.row 
+                && f.GetFlagStatus == Flag.FlagStatus.UP){
+                return true;
+            }
+        }
+        return false;
     }
 }
