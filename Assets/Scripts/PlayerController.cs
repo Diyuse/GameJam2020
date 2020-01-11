@@ -15,6 +15,14 @@ public class PlayerController : MonoBehaviour
     private Board board;
     public GameObject boardGameObject;
 
+
+    private EnemyController enemyController;
+    public GameObject enemy;
+    
+
+    public GameObject gameManager;
+
+
     public enum Direction{
         NORTH,
         SOUTH,
@@ -25,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         board = boardGameObject.GetComponent<Board>();
+        enemyController = enemy.GetComponent<EnemyController>();
 
         row = board.startingRow;
         col = board.startingCol;
@@ -136,6 +145,27 @@ public class PlayerController : MonoBehaviour
         // update current position
         this.col = nextCol;
         this.row = nextRow;
+
+
+        int[] newPos = enemyController.moveEnemy();
+        if (newPos.Length > 0)
+        {
+            row = newPos[0];
+            col = newPos[1];
+        }
+        // pick up a flag
+        Flag flag = IsOnFlag();
+        if (flag != null) {
+            flag.CollectFlag();
+        }
+
+        // check if won
+        if (HasWonGame()) {
+            Debug.Log("Win!!");
+
+            gameManager.GetComponent<GameManager>().WinGame();
+
+        }
     }
 
     /// <summary>
@@ -162,20 +192,29 @@ public class PlayerController : MonoBehaviour
     /// Check if the player has won the game/level
     /// </summary>
     public bool HasWonGame(){
-        return false;
+        
+        foreach(Flag f in board.flags){
+            if (!f.Collected) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
     /// Check if the player is on a flag
     /// </summary>
-    public bool IsOnFlag(){
+    public Flag IsOnFlag(){
+
+        Flag.FlagStatus match;
+        if (board.boardIsFlipped) match = Flag.FlagStatus.DOWN;
+        else match = Flag.FlagStatus.UP;
 
         foreach(Flag f in board.flags){
             if (f.Col == this.col && f.Row == this.row 
-                && f.GetFlagStatus == Flag.FlagStatus.UP){
-                return true;
+                && f.GetFlagStatus == match){
+                return f;
             }
         }
-        return false;
+        return null;
     }
 }
