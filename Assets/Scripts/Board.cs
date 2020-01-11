@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using System.IO;
 public class Board : MonoBehaviour
 {
     
@@ -36,46 +36,62 @@ public class Board : MonoBehaviour
     private void Awake()
     {
         boardIsFlipped = false;
-        gridSize = 8;
+        gridSize = 16;
         tileSize = 1;
         startingRow = 0;
         startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
-        
+
+        var reader = new StreamReader(File.OpenRead("map.csv"));
+
         //Setting up grid
         for (int i = 0; i < gridSize; i++)
         {
+            var line = reader.ReadLine();
+
+
             for (int j = 0; j < gridSize; j++)
             {
+
+                var values = line.Split(',');
+
                 //Getting the position to place the tile
-                position = new Vector3(i* tileSize, tileSize/2, j*tileSize);
-                
+                position = new Vector3(i * tileSize, tileSize / 2, j * tileSize);
+
                 //Creating the tile
-                myGrid[i,j] = Instantiate(tilePrefab, position, Quaternion.identity, origin) as GameObject;
-                
+                myGrid[i, j] = Instantiate(tilePrefab, position, Quaternion.identity, origin) as GameObject;
+
                 //Changing the name
-                myGrid[i,j].name = String.Format("Tile {0}:{1}", i, j);
-                
+                myGrid[i, j].name = String.Format("Tile {0}:{1}", i, j);
+
                 //Setting the status to unchanged as default
-                myTiles[i,j] = new Tile(i,j);
-                
-                //Should try to incorporate the creation of the cube with the actual tile class
-                //Can just instantiate here and construct it with the instantiate object
+                myTiles[i, j] = new Tile(i, j);
+
+                if (values[j].Equals("1"))
+                {
+                    LowerTile(i, j);
+                }
+
+                else if (values[j].Equals("2"))
+                {
+                    DeleteTile(i, j);
+                   
+                }
             }
+
+            //Testing adding flags
+
+            Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
+            Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
+
+            flags[0] = firstFlag;
+            flags[1] = secondFlag;
+
+            //Setting the starting position of the player
+            player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
         }
-        
-        //Testing adding flags
-        
-        Flag firstFlag = new Flag(7,7,Flag.FlagStatus.UP, this);
-        Flag secondFlag = new Flag(0,0,Flag.FlagStatus.DOWN, this);
-
-        flags[0] = firstFlag;
-        flags[1] = secondFlag;
-
-        //Setting the starting position of the player
-        player.transform.position = origin.position + new Vector3(startingRow, tileSize+1, startingCol);
     }
 
     /// <summary>
@@ -88,6 +104,8 @@ public class Board : MonoBehaviour
         if (myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
         {
             myGrid[row,col].transform.Translate(0,-tileSize,0);
+            
+
             myTiles[row, col].SetStatus(Tile.TileStatus.CHANGED);
         } else if (myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
         {
