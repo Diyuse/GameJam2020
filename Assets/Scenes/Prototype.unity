@@ -397,9 +397,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 537718145}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d65cd4e4f3a72cb42a8c87f600f7bf29, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff736046bbee884fbd2939fb3fabb4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 1
+  moveVector: {x: 0, y: 0, z: 0}
   canvas: {fileID: 361574287}
 --- !u!4 &537718147
 Transform:
@@ -717,11 +719,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardGameObject: {fileID: 1704866738}
-
   enemy: {fileID: 752358318}
-
   gameManager: {fileID: 537718145}
-
 --- !u!1 &1704866738
 GameObject:
   m_ObjectHideFlags: 0
