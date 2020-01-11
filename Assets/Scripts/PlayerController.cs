@@ -155,7 +155,8 @@ public class PlayerController : MonoBehaviour
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
-            flag.CollectFlag();
+            if(!flag.CollectFlag())
+                Debug.Log("Cannot remove flag");
         }
 
         // check if won
@@ -195,7 +196,7 @@ public class PlayerController : MonoBehaviour
         foreach(Flag f in board.flags){
             if (!f.Collected) return false;
         }
-
+        Debug.Log("Win!");
         return true;
     }
 
@@ -211,6 +212,7 @@ public class PlayerController : MonoBehaviour
         foreach(Flag f in board.flags){
             if (f.Col == this.col && f.Row == this.row 
                 && f.GetFlagStatus == match){
+                Debug.Log("On flag");
                 return f;
             }
         }
