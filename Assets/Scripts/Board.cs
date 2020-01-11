@@ -12,7 +12,7 @@ public class Board : MonoBehaviour
     public bool boardIsFlipped;
 
     [Header("Grid Setup")]
-    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] public GameObject tilePrefab;
     [SerializeField] public Transform origin;
     private GameObject grid;
     [SerializeField] public float tileSize;
@@ -21,7 +21,7 @@ public class Board : MonoBehaviour
     [SerializeField] public int startingRow;
     [SerializeField] public int startingCol; 
     [Header("Others")] 
-    [SerializeField] private GameObject player;
+    [SerializeField] public GameObject player;
     [SerializeField] public GameObject flagPrefab;
 
     private Vector3 position;
