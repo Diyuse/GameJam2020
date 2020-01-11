@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e5ee250ad9aea4096e23dcdef7b605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 0}
 --- !u!1 &1704866738
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,12 +429,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1704866738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b16cbd2fb777254b9a4da8276a802f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c7f0df1eb64c944f8f49662cc7d1b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardIsFlipped: 0
   tilePrefab: {fileID: 2440418212223822933, guid: f075d4b40b86d9c4aaced2bc583ccd16,
     type: 3}
   origin: {fileID: 1704866739}
-  player: {fileID: 1477765056}
-  flagPrefab: {fileID: 1649193076768809238, guid: 835da36fed1907d4f88f153c567e659f,
-    type: 3}
+  tileSize: 0
+  gridSize: 0
+  startingRow: 0
+  startingCol: 0
+  player: {fileID: 0}
+  flagPrefab: {fileID: 0}

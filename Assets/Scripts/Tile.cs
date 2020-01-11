@@ -21,7 +21,7 @@
     /// <summary>
     /// Default to UNCHANGED and NONE.
     /// </summary>
-    public Tile()
+    public Tile(int row, int col)
     {
         currentStatus = TileStatus.UNCHANGED;
     }

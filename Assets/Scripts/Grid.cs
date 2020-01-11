@@ -3,22 +3,26 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    public static GameObject[,] myGrid;
-    public static Tile[,] myTiles;
-    public static bool boardIsFlipped;
+    
+    // References to the tiles
+    public GameObject[,] myGrid;
+    public Tile[,] myTiles;
+    
+    // Board state
+    public bool boardIsFlipped;
 
     [Header("Grid Setup")]
     [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private Transform origin;
-    private static GameObject grid;
-    [SerializeField] public static float tileSize;
-    [SerializeField] public static int gridSize;
+    [SerializeField] public Transform origin;
+    private GameObject grid;
+    [SerializeField] public float tileSize;
+    [SerializeField] public int gridSize;
     [Header("Starting Position")]
-    [SerializeField] public static int startingRow;
-    [SerializeField] public static int startingCol; 
+    [SerializeField] public int startingRow;
+    [SerializeField] public int startingCol; 
     [Header("Others")] 
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject flagPrefab;
+    [SerializeField] public GameObject flagPrefab;
 
     private Vector3 position;
 
@@ -51,7 +55,7 @@ public class Grid : MonoBehaviour
                 myGrid[i,j].name = String.Format("Tile {0}:{1}", i, j);
                 
                 //Setting the status to unchanged as default
-                myTiles[i,j] = new Tile(Tile.TileStatus.UNCHANGED);
+                myTiles[i,j] = new Tile(i,j);
                 
                 //Should try to incorporate the creation of the cube with the actual tile class
                 //Can just instantiate here and construct it with the instantiate object
@@ -59,16 +63,9 @@ public class Grid : MonoBehaviour
         }
         
         //Testing adding flags
-        //myTiles[7,7].SetFlagStatus(Tile.FlagStatus.UP);
-        Flag firstFlag = new Flag(7,7,Flag.FlagStatus.UP);
-        Flag secondFlag = new Flag(0,0,Flag.FlagStatus.DOWN);
-
-        position = new Vector3(7* tileSize, tileSize/2 + tileSize, 7*tileSize);
-        GameObject flag1 = GameObject.Instantiate(flagPrefab, position, Quaternion.identity, origin);
         
-        //myTiles[0,7].SetFlagStatus(Tile.FlagStatus.DOWN);
-        position = new Vector3(0, tileSize/2 - (2 *tileSize), 7*tileSize);
-        GameObject flag2 = GameObject.Instantiate(flagPrefab, position, Quaternion.identity, origin);
+        Flag firstFlag = new Flag(7,7,Flag.FlagStatus.UP, this);
+        Flag secondFlag = new Flag(0,0,Flag.FlagStatus.DOWN, this);
 
         //Setting the starting position of the player
         player.transform.position = origin.position + new Vector3(startingRow, tileSize+1, startingCol);
@@ -79,7 +76,7 @@ public class Grid : MonoBehaviour
     /// </summary>
     /// <param name="row"></param>
     /// <param name="col"></param>
-    public static void LowerTile(int row, int col)
+    public void LowerTile(int row, int col)
     {
         if (myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
         {
@@ -95,7 +92,7 @@ public class Grid : MonoBehaviour
     /// <summary>
     /// Flips the state of the board.
     /// </summary>
-    public static void Flip()
+    public void Flip()
     {
         if (boardIsFlipped)
         {
@@ -114,7 +111,7 @@ public class Grid : MonoBehaviour
     /// </summary>
     /// <param name="row"></param>
     /// <param name="col"></param>
-    public static void DeleteTile(int row, int col)
+    public void DeleteTile(int row, int col)
     {
         myTiles[row, col].SetStatus(Tile.TileStatus.DELETED);
         myGrid[row, col].SetActive(false);
