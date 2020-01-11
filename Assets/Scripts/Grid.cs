@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class GridCreator : MonoBehaviour
+public class Grid : MonoBehaviour
 {
     public static GameObject[,] myGrid;
     public static Tile[,] myTiles;
@@ -21,6 +21,10 @@ public class GridCreator : MonoBehaviour
     [SerializeField] private GameObject flagPrefab;
 
     private Vector3 position;
+
+    /// <summary>
+    /// Creates a hard-coded grid
+    /// </summary>
     private void Awake()
     {
         boardIsFlipped = false;
@@ -47,7 +51,7 @@ public class GridCreator : MonoBehaviour
                 myGrid[i,j].name = String.Format("Tile {0}:{1}", i, j);
                 
                 //Setting the status to unchanged as default
-                myTiles[i,j] = new Tile(Tile.TileStatus.UNCHANGED, Tile.FlagStatus.NONE);
+                myTiles[i,j] = new Tile(Tile.TileStatus.UNCHANGED);
                 
                 //Should try to incorporate the creation of the cube with the actual tile class
                 //Can just instantiate here and construct it with the instantiate object
@@ -55,10 +59,14 @@ public class GridCreator : MonoBehaviour
         }
         
         //Testing adding flags
-        myTiles[7,7].SetFlagStatus(Tile.FlagStatus.UP);
+        //myTiles[7,7].SetFlagStatus(Tile.FlagStatus.UP);
+        Flag firstFlag = new Flag(7,7,Flag.FlagStatus.UP);
+        Flag secondFlag = new Flag(0,0,Flag.FlagStatus.DOWN);
+
         position = new Vector3(7* tileSize, tileSize/2 + tileSize, 7*tileSize);
         GameObject flag1 = GameObject.Instantiate(flagPrefab, position, Quaternion.identity, origin);
-        myTiles[0,7].SetFlagStatus(Tile.FlagStatus.DOWN);
+        
+        //myTiles[0,7].SetFlagStatus(Tile.FlagStatus.DOWN);
         position = new Vector3(0, tileSize/2 - (2 *tileSize), 7*tileSize);
         GameObject flag2 = GameObject.Instantiate(flagPrefab, position, Quaternion.identity, origin);
 
