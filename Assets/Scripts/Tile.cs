@@ -3,7 +3,8 @@
     public enum TileStatus
     {
         CHANGED,
-        UNCHANGED
+        UNCHANGED,
+        DELETED
     }
 
     private TileStatus currentStatus;

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private int col;
     private int gridSize;
     private float tileSize;
+    private bool justFlipped;
 
     private void Start()
     {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
             if (CheckIfValidMove(row - 1, col))
             {
                 //When w is pressed, check if the player is within the grid
+                TileRemoval(); // Check if the tile will be removed and does it
                 transform.Translate(-tileSize,0,0); //Move the player by the same amount as the tile size
                 GridCreator.LowerTile(row, col); //Lower the tile of the original position
                 row--; //Keep track of the position of the player
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
         {
             if (CheckIfValidMove(row, col-1))
             {
+                TileRemoval();
                 transform.Translate(0, 0, -tileSize);
                 GridCreator.LowerTile(row, col);
                 col--;
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
         {
             if (CheckIfValidMove(row + 1, col))
             {
+                TileRemoval();
                 transform.Translate(tileSize, 0, 0);
                 GridCreator.LowerTile(row, col);
                 row++;
@@ -51,17 +55,22 @@ public class PlayerController : MonoBehaviour
         {
             if (CheckIfValidMove(row, col + 1))
             {
+                TileRemoval();
                 transform.Translate(0, 0, tileSize);
                 GridCreator.LowerTile(row, col);
                 col++;
             }
         }
-        
+
         //Flip
         if (Input.GetKeyDown("space"))
         {
-            GridCreator.Flip();
-            GridCreator.LowerTile(row, col);
+            if (GridCreator.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            {
+                GridCreator.Flip();
+                GridCreator.LowerTile(row, col);
+                justFlipped = true;
+            }
         }
     }
 
@@ -79,16 +88,25 @@ public class PlayerController : MonoBehaviour
             }
         }else if (!GridCreator.boardIsFlipped)
         {
-            if (GridCreator.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
+            if (GridCreator.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
             {
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
 
         return true;
+    }
+
+    private void TileRemoval()
+    {
+        if (justFlipped)
+        {
+            GridCreator.DeleteTile(row, col);
+            justFlipped = false;
+        }
     }
 }

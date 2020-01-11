@@ -6,9 +6,11 @@ public class GridCreator : MonoBehaviour
     public static GameObject[,] myGrid;
     public static Tile[,] myTiles;
     public static bool boardIsFlipped;
+
     [Header("Grid Setup")]
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform origin;
+    private static GameObject grid;
     [SerializeField] public static float tileSize;
     [SerializeField] public static int gridSize;
     [Header("Starting Position")]
@@ -27,6 +29,7 @@ public class GridCreator : MonoBehaviour
         startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
+        grid = GameObject.FindWithTag("Grid");
         
         //Setting up grid
         for (int i = 0; i < gridSize; i++)
@@ -69,7 +72,22 @@ public class GridCreator : MonoBehaviour
 
     public static void Flip()
     {
-        Debug.Log("Board has been flipped");
+        if (boardIsFlipped)
+        {
+            boardIsFlipped = false;
+            grid.transform.localScale = new Vector3(1,1,1);
+        }
+        else
+        {
+            boardIsFlipped = true;
+            grid.transform.localScale = new Vector3(1,-1,1);
+        }
+    }
+
+    public static void DeleteTile(int row, int col)
+    {
+        myTiles[row, col].SetStatus(Tile.TileStatus.DELETED);
+        myGrid[row, col].SetActive(false);
     }
 
 }
