@@ -136,6 +136,17 @@ public class PlayerController : MonoBehaviour
         // update current position
         this.col = nextCol;
         this.row = nextRow;
+
+        // pick up a flag
+        Flag flag = IsOnFlag();
+        if (flag != null) {
+            flag.CollectFlag();
+        }
+
+        // check if won
+        if (HasWonGame()) {
+            Debug.Log("Win!!");
+        }
     }
 
     /// <summary>
@@ -162,20 +173,29 @@ public class PlayerController : MonoBehaviour
     /// Check if the player has won the game/level
     /// </summary>
     public bool HasWonGame(){
-        return false;
+        
+        foreach(Flag f in board.flags){
+            if (!f.Collected) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
     /// Check if the player is on a flag
     /// </summary>
-    public bool IsOnFlag(){
+    public Flag IsOnFlag(){
+
+        Flag.FlagStatus match;
+        if (board.boardIsFlipped) match = Flag.FlagStatus.DOWN;
+        else match = Flag.FlagStatus.UP;
 
         foreach(Flag f in board.flags){
             if (f.Col == this.col && f.Row == this.row 
-                && f.GetFlagStatus == Flag.FlagStatus.UP){
-                return true;
+                && f.GetFlagStatus == match){
+                return f;
             }
         }
-        return false;
+        return null;
     }
 }
