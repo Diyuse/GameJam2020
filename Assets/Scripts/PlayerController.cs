@@ -15,7 +15,13 @@ public class PlayerController : MonoBehaviour
     private Board board;
     public GameObject boardGameObject;
 
+
+    private EnemyController enemyController;
+    public GameObject enemy;
+    
+
     public GameObject gameManager;
+
 
     public enum Direction{
         NORTH,
@@ -27,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         board = boardGameObject.GetComponent<Board>();
+        enemyController = enemy.GetComponent<EnemyController>();
 
         row = board.startingRow;
         col = board.startingCol;
@@ -139,6 +146,13 @@ public class PlayerController : MonoBehaviour
         this.col = nextCol;
         this.row = nextRow;
 
+
+        int[] newPos = enemyController.moveEnemy();
+        if (newPos.Length > 0)
+        {
+            row = newPos[0];
+            col = newPos[1];
+
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
@@ -150,6 +164,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Win!!");
 
             gameManager.GetComponent<GameManager>().WinGame();
+
         }
     }
 
