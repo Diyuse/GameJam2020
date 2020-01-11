@@ -11,6 +11,9 @@ public class Flag
     public int Row { get => row; }
     public int Col { get => col; }
     public FlagStatus GetFlagStatus { get => flagStatus; }
+    public bool Collected { get => collected; }
+
+    private GameObject flagGameObject;
 
     public enum FlagStatus
     {
@@ -29,17 +32,20 @@ public class Flag
         float tileSize = grid.tileSize;
 
         Vector3 position = new Vector3(row* tileSize, tileSize/2 + tileSize, col*tileSize);
-        GameObject flag = GameObject.Instantiate(grid.flagPrefab, position, Quaternion.identity, grid.origin);
+        this.flagGameObject = GameObject.Instantiate(grid.flagPrefab, position, Quaternion.identity, grid.origin);
         
     }
 
     /// <summary>
-    /// Attempt to collect the flag, throws exception if flag is already collected
+    /// Attempt to collect the flag
     /// </summary>
-    public void CollectFlag(){
-        if (collected){
-            throw new Exception("Flag has been already collected");
-        }
+    public bool CollectFlag(){
+        if (collected) return false;
         collected = true;
+
+        // Make the flag invisible, animation is welcome
+        this.flagGameObject.SetActive(false);
+
+        return true;
     }
 }
