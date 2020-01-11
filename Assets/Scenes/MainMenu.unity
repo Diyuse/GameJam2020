@@ -957,8 +957,8 @@ Camera:
   m_GameObject: {fileID: 1838978450}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 1, g: 0.820553, b: 0.8066038, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1023,7 +1023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1877901742
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1304,6 +1304,7 @@ GameObject:
   - component: {fileID: 1980202112}
   - component: {fileID: 1980202111}
   - component: {fileID: 1980202110}
+  - component: {fileID: 1980202114}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1392,6 +1393,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1980202114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980202109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91023c797c8fce543948bf78c327cead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startButton: {fileID: 1788259492}
+  continueButton: {fileID: 1813871820}
+  optionsButton: {fileID: 1877901743}
+  exitButton: {fileID: 1316713463}
 --- !u!1 &2035708536
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour
 
     private void Options()
     {
-        GoToLevel("Options");
+        // GoToLevel("Options");
     }
 
     private void Exit()
