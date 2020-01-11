@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
         {
             row = newPos[0];
             col = newPos[1];
-
+        }
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
