@@ -521,6 +521,6 @@ MonoBehaviour:
   tilePrefab: {fileID: -927199367670048503, guid: cd764a4e0c02f6b4b81e3dfa7ac9482e,
     type: 3}
   origin: {fileID: 1704866739}
-  endRow: 7
-  endCol: 7
   player: {fileID: 280289473}
+  flagPrefab: {fileID: 1649193076768809238, guid: 835da36fed1907d4f88f153c567e659f,
+    type: 3}

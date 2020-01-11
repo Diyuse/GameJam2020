@@ -74,6 +74,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if the tile in the input direction is valid of not.
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <returns></returns>
     private bool CheckIfValidMove(int row, int col)
     {
         if (GridCreator.boardIsFlipped)
@@ -101,6 +107,9 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Removes the tile if it's a movement following a flip.
+    /// </summary>
     private void TileRemoval()
     {
         if (justFlipped)
