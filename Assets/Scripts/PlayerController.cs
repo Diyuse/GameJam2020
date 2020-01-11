@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private Board board;
     public GameObject boardGameObject;
 
+    private EnemyController enemyController;
+    public GameObject enemy;
+    
     public enum Direction{
         NORTH,
         SOUTH,
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         board = boardGameObject.GetComponent<Board>();
+        enemyController = enemy.GetComponent<EnemyController>();
 
         row = board.startingRow;
         col = board.startingCol;
@@ -136,6 +140,13 @@ public class PlayerController : MonoBehaviour
         // update current position
         this.col = nextCol;
         this.row = nextRow;
+
+        int[] newPos = enemyController.moveEnemy();
+        if (newPos.Length > 0)
+        {
+            row = newPos[0];
+            col = newPos[1];
+        }
     }
 
     /// <summary>

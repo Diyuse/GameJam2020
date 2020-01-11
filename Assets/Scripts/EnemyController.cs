@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -8,6 +9,7 @@ public class EnemyController : MonoBehaviour
     private int col;
     private float tileSize;
     private int gridSize;
+    private int[] playerCoord;
 
     private Board grid;
     public GameObject gridGameObject;
@@ -20,6 +22,7 @@ public class EnemyController : MonoBehaviour
     {
         playerController = player.GetComponent<PlayerController>();
         grid = gridGameObject.GetComponent<Board>();
+
 
         // Choose random starting coord
         System.Random rand = new System.Random();
@@ -39,11 +42,13 @@ public class EnemyController : MonoBehaviour
 
         row = x;
         col = y;
+        
     }
 
     // Update is called once per frame
-    void Update()
+    public int[] moveEnemy()
     {
+        playerCoord = playerController.GetPlayerCoords();
         // Random move
         switch (Move())
         {
@@ -88,7 +93,6 @@ public class EnemyController : MonoBehaviour
         }
 
         // Check result
-        int[] playerCoord = playerController.GetPlayerCoords();
         System.Random rnd = new System.Random();
         List<int[]> validTilePos = new List<int[]>();
 
@@ -97,7 +101,7 @@ public class EnemyController : MonoBehaviour
         {
             for (int j=0; j < gridSize; j++)
             {
-                if (grid.myTiles[i, j].CurrentStatus == Tile.TileStatus.UNCHANGED)
+                if ((grid.myTiles[i, j].CurrentStatus == Tile.TileStatus.UNCHANGED && !grid.boardIsFlipped ) || (grid.myTiles[i, j].CurrentStatus == Tile.TileStatus.CHANGED && grid.boardIsFlipped) && i != row && j != col)
                 {
                     validTilePos.Add(new int[2] { i, j });
                 }
@@ -105,12 +109,16 @@ public class EnemyController : MonoBehaviour
         }
 
         // Upon collision with PLAYER, PLAYER gets teleported to random valid spot
-        if (playerCoord == GetEnmCoords())
+        if (playerCoord.SequenceEqual(GetEnmCoords()))
         {
             int[] tilePos = validTilePos[rnd.Next(validTilePos.Count)];
             playerController.transform.position = new Vector3(tilePos[0] * tileSize, 2, tilePos[1] * tileSize);
+            return tilePos;
         }
+        else return new int[] { };
     }
+
+    
 
     /// <summary>
     /// Get enemy position

@@ -497,6 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardGameObject: {fileID: 1704866738}
+  enemy: {fileID: 752358318}
 --- !u!1 &1704866738
 GameObject:
   m_ObjectHideFlags: 0
