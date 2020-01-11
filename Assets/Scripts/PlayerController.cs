@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Board board;
     public GameObject boardGameObject;
 
+    public GameObject gameManager;
+
     public enum Direction{
         NORTH,
         SOUTH,
@@ -146,6 +148,8 @@ public class PlayerController : MonoBehaviour
         // check if won
         if (HasWonGame()) {
             Debug.Log("Win!!");
+
+            gameManager.GetComponent<GameManager>().WinGame();
         }
     }
 
