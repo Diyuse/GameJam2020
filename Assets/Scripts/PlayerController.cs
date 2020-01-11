@@ -12,68 +12,55 @@ public class PlayerController : MonoBehaviour
     private float tileSize;
     private bool justFlipped;
 
-    private Grid grid;
-    public GameObject gridGameObject;
+    private Board board;
+    public GameObject boardGameObject;
+
+    public enum Direction{
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
+    }
 
     private void Start()
     {
-        grid = gridGameObject.GetComponent<Grid>();
+        board = boardGameObject.GetComponent<Board>();
 
-        row = grid.startingRow;
-        col = grid.startingCol;
-        gridSize = grid.gridSize;
-        tileSize = grid.tileSize;
+        row = board.startingRow;
+        col = board.startingCol;
+        gridSize = board.gridSize;
+        tileSize = board.tileSize;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("w") && row > 0)
+        // controls for moving
+        if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
         {
-            if (CheckIfValidMove(row - 1, col))
-            {
-                //When w is pressed, check if the player is within the grid
-                TileRemoval(); // Check if the tile will be removed and does it
-                transform.Translate(-tileSize,0,0); //Move the player by the same amount as the tile size
-                grid.LowerTile(row, col); //Lower the tile of the original position
-                row--; //Keep track of the position of the player
-            }
-        } else if (Input.GetKeyDown("a") && col > 0)
+            Move(Direction.NORTH); //(row - 1, col)
+
+        } else if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
-            if (CheckIfValidMove(row, col-1))
-            {
-                TileRemoval();
-                transform.Translate(0, 0, -tileSize);
-                grid.LowerTile(row, col);
-                col--;
-            }
-        } else if (Input.GetKeyDown("s") && row < gridSize - 1)
+            Move(Direction.WEST); //(row, col-1)
+
+        } else if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
         {
-            if (CheckIfValidMove(row + 1, col))
-            {
-                TileRemoval();
-                transform.Translate(tileSize, 0, 0);
-                grid.LowerTile(row, col);
-                row++;
-            }
-        } else if (Input.GetKeyDown("d") && col < gridSize - 1)
+            Move(Direction.SOUTH); //(row + 1, col)
+            
+        } else if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
         {
-            if (CheckIfValidMove(row, col + 1))
-            {
-                TileRemoval();
-                transform.Translate(0, 0, tileSize);
-                grid.LowerTile(row, col);
-                col++;
-            }
+            Move(Direction.EAST); //(row, col + 1);
+        
         }
 
-        //Flip
+        // Flip
         if (Input.GetKeyDown("space"))
         {
-            if (grid.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
             {
-                grid.Flip();
-                grid.LowerTile(row, col);
+                board.Flip();
+                board.LowerTile(row, col);
                 justFlipped = true;
             }
         }
@@ -82,34 +69,73 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Checks if the tile in the input direction is valid of not.
     /// </summary>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    /// <returns></returns>
-    private bool CheckIfValidMove(int row, int col)
+    /// <param name="direction"/>
+    private void Move(Direction direction)
     {
-        if (grid.boardIsFlipped)
-        {
-            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }else if (!grid.boardIsFlipped)
-        {
-            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        int nextRow = row;
+        int nextCol = col;
+
+        // Check for board bounds
+        switch (direction){
+            case Direction.NORTH:
+                nextRow--;
+                if (row <= 0) return;
+                break;
+            case Direction.SOUTH:
+                nextRow++;
+                if (row >= gridSize - 1) return;
+                break;
+            case Direction.EAST:
+                nextCol++;
+                if (col >= gridSize - 1) return;
+                break;
+            case Direction.WEST:
+                nextCol--;
+                if (col <= 0) return;
+                break;
         }
 
-        return true;
+        // Check if altitudes match
+        if (board.boardIsFlipped 
+            && board.myTiles[nextRow, nextCol].CurrentStatus != Tile.TileStatus.CHANGED)
+            return;
+
+        if (!board.boardIsFlipped
+            && board.myTiles[nextRow, nextCol].CurrentStatus != Tile.TileStatus.UNCHANGED)
+            return;        
+
+        // valid moves
+        
+        // attempt to remove the tile
+        TileRemoval();
+
+        // lower the tile
+        board.LowerTile(row, col);
+
+        // destination position
+        Vector3 destination = new Vector3(0,0,0);
+
+        switch (direction){
+            case Direction.NORTH:
+                destination = new Vector3(-tileSize,0,0);
+                break;
+            case Direction.SOUTH:
+                destination = new Vector3(tileSize, 0, 0);
+                break;
+            case Direction.EAST:
+                destination = new Vector3(0, 0, tileSize);
+                break;
+            case Direction.WEST:
+                destination = new Vector3(0, 0, -tileSize);
+                break;
+        }
+
+        // translate
+        transform.Translate(destination);
+
+        // update current position
+        this.col = nextCol;
+        this.row = nextRow;
     }
 
     /// <summary>
@@ -119,7 +145,7 @@ public class PlayerController : MonoBehaviour
     {
         if (justFlipped)
         {
-            grid.DeleteTile(row, col);
+            board.DeleteTile(row, col);
             justFlipped = false;
         }
     }
@@ -143,6 +169,13 @@ public class PlayerController : MonoBehaviour
     /// Check if the player is on a flag
     /// </summary>
     public bool IsOnFlag(){
-        return true;
+
+        foreach(Flag f in board.flags){
+            if (f.Col == this.col && f.Row == this.row 
+                && f.GetFlagStatus == Flag.FlagStatus.UP){
+                return true;
+            }
+        }
+        return false;
     }
 }

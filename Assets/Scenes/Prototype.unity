@@ -496,7 +496,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e5ee250ad9aea4096e23dcdef7b605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   gridGameObject: {fileID: 1704866738}
+=======
+  boardGameObject: {fileID: 1704866738}
+>>>>>>> b0448bec0b45f2e46170dcc610124853d5212d34
 --- !u!1 &1704866738
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +512,7 @@ GameObject:
   - component: {fileID: 1704866739}
   - component: {fileID: 1704866740}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Board
   m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -537,7 +541,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1704866738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c7f0df1eb64c944f8f49662cc7d1b01, type: 3}
+  m_Script: {fileID: 11500000, guid: 5059ec8b939460641b6fa91d95f3153e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boardIsFlipped: 0
@@ -549,4 +553,9 @@ MonoBehaviour:
   startingRow: 0
   startingCol: 0
   player: {fileID: 1477765056}
+<<<<<<< HEAD
   flagPrefab: {fileID: 0}
+=======
+  flagPrefab: {fileID: 1649193076768809238, guid: 835da36fed1907d4f88f153c567e659f,
+    type: 3}
+>>>>>>> b0448bec0b45f2e46170dcc610124853d5212d34
