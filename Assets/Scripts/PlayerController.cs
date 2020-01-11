@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
         } else if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
         {
             Move(Direction.EAST); //(row, col + 1);
-        
         }
 
         // Flip
