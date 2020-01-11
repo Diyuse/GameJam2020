@@ -30,8 +30,17 @@ public class Flag
         this.flagStatus = fs;
 
         float tileSize = grid.tileSize;
-
-        Vector3 position = new Vector3(row* tileSize, tileSize/2 + tileSize, col*tileSize);
+        
+        Vector3 position = new Vector3();
+        switch(fs){
+        case FlagStatus.UP:
+            position = new Vector3(row* tileSize, tileSize/2 + tileSize, col*tileSize);
+            break;
+        case FlagStatus.DOWN:
+            position = new Vector3(row* tileSize, -1*(tileSize/2 + tileSize), col*tileSize);
+            break;
+        }
+        
         this.flagGameObject = GameObject.Instantiate(grid.flagPrefab, position, Quaternion.identity, grid.origin);
         
     }
