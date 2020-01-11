@@ -12,12 +12,17 @@ public class PlayerController : MonoBehaviour
     private float tileSize;
     private bool justFlipped;
 
+    private Grid grid;
+    public GameObject gridGameObject;
+
     private void Start()
     {
-        row = Grid.startingRow;
-        col = Grid.startingCol;
-        gridSize = Grid.gridSize;
-        tileSize = Grid.tileSize;
+        grid = gridGameObject.GetComponent<Grid>();
+
+        row = grid.startingRow;
+        col = grid.startingCol;
+        gridSize = grid.gridSize;
+        tileSize = grid.tileSize;
     }
 
     // Update is called once per frame
@@ -30,7 +35,7 @@ public class PlayerController : MonoBehaviour
                 //When w is pressed, check if the player is within the grid
                 TileRemoval(); // Check if the tile will be removed and does it
                 transform.Translate(-tileSize,0,0); //Move the player by the same amount as the tile size
-                Grid.LowerTile(row, col); //Lower the tile of the original position
+                grid.LowerTile(row, col); //Lower the tile of the original position
                 row--; //Keep track of the position of the player
             }
         } else if (Input.GetKeyDown("a") && col > 0)
@@ -39,7 +44,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(0, 0, -tileSize);
-                Grid.LowerTile(row, col);
+                grid.LowerTile(row, col);
                 col--;
             }
         } else if (Input.GetKeyDown("s") && row < gridSize - 1)
@@ -48,7 +53,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(tileSize, 0, 0);
-                Grid.LowerTile(row, col);
+                grid.LowerTile(row, col);
                 row++;
             }
         } else if (Input.GetKeyDown("d") && col < gridSize - 1)
@@ -57,7 +62,7 @@ public class PlayerController : MonoBehaviour
             {
                 TileRemoval();
                 transform.Translate(0, 0, tileSize);
-                Grid.LowerTile(row, col);
+                grid.LowerTile(row, col);
                 col++;
             }
         }
@@ -65,10 +70,10 @@ public class PlayerController : MonoBehaviour
         //Flip
         if (Input.GetKeyDown("space"))
         {
-            if (Grid.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            if (grid.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
             {
-                Grid.Flip();
-                Grid.LowerTile(row, col);
+                grid.Flip();
+                grid.LowerTile(row, col);
                 justFlipped = true;
             }
         }
@@ -82,9 +87,9 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private bool CheckIfValidMove(int row, int col)
     {
-        if (Grid.boardIsFlipped)
+        if (grid.boardIsFlipped)
         {
-            if (Grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
+            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
             {
                 return true;
             }
@@ -92,9 +97,9 @@ public class PlayerController : MonoBehaviour
             {
                 return false;
             }
-        }else if (!Grid.boardIsFlipped)
+        }else if (!grid.boardIsFlipped)
         {
-            if (Grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
+            if (grid.myTiles[row, col].CurrentStatus == Tile.TileStatus.UNCHANGED)
             {
                 return true;
             }
@@ -114,7 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (justFlipped)
         {
-            Grid.DeleteTile(row, col);
+            grid.DeleteTile(row, col);
             justFlipped = false;
         }
     }
