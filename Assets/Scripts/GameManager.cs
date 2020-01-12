@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown("l")){
             board.GenerateLevel(false);
+        } else if (Input.GetKeyDown(("m")))
+        {
+            SceneManager.LoadScene("MainMenu");
         }
     }
 

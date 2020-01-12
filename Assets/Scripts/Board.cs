@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 public class Board : MonoBehaviour
@@ -38,8 +39,9 @@ public class Board : MonoBehaviour
     /// Creates a hard-coded grid
     /// </summary>
     public void GenerateLevel(bool isTutorial)
-    {   
-        if(!isTutorial){
+    {
+        if (!isTutorial)
+        {
             boardIsFlipped = false;
             gridSize = 16;
             tileSize = 1;
@@ -90,20 +92,37 @@ public class Board : MonoBehaviour
                 }
             }
             //Testing adding flags
+            List<int[]> validTilePos = new List<int[]>();
 
-                Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
-                Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
-
-                flags[0] = firstFlag;
-                flags[1] = secondFlag;
-
-                //Setting the starting position of the player
-                player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
+            // Valid spots to move to
+            for (int i=0; i < gridSize; i++)
+            {
+                for (int j=0; j < gridSize; j++)
+                {
+                    if ((myTiles[i, j].CurrentStatus == Tile.TileStatus.UNCHANGED && !boardIsFlipped ) || (myTiles[i, j].CurrentStatus == Tile.TileStatus.CHANGED && boardIsFlipped) && i != 0 && j != 0)
+                    {
+                        validTilePos.Add(new int[2] { i, j });
+                    }
+                }
+            }
             
+            System.Random rnd = new System.Random();
+            int tileIndex1 = rnd.Next(validTilePos.Count);
+            int tileIndex2 = rnd.Next(validTilePos.Count);
+
+            Flag firstFlag = new Flag(validTilePos[tileIndex1][0], validTilePos[tileIndex1][1], Flag.FlagStatus.UP, this);
+            Flag secondFlag = new Flag(validTilePos[tileIndex2][0], validTilePos[tileIndex2][1], Flag.FlagStatus.DOWN, this);
+
+            flags[0] = firstFlag;
+            flags[1] = secondFlag;
+
+            //Setting the starting position of the player
+            player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
+
         }
-    
-    // tutorial
-    else{
+
+        // tutorial
+        else{
         boardIsFlipped = false;
         gridSize = 3;
         tileSize = 1;

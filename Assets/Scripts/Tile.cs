@@ -1,10 +1,23 @@
-﻿public class Tile
+﻿
+public class Tile
 {
+    private int row;
+    private int col;
     public enum TileStatus
     {
         CHANGED,
         UNCHANGED,
         DELETED
+    }
+
+    public int Row
+    {
+        get { return row; }
+    }
+
+    public int Col
+    {
+        get { return col; }
     }
 
     private TileStatus currentStatus;
@@ -24,6 +37,8 @@
     public Tile(int row, int col)
     {
         currentStatus = TileStatus.UNCHANGED;
+        this.row = row;
+        this.col = col;
     }
 
     /// <summary>

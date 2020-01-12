@@ -71,8 +71,9 @@ public class PlayerController : MonoBehaviour
             {
                 Move(Direction.EAST); //(row, col + 1);
             }
+        }
 
-            // Flip
+        // Flip
             if (Input.GetKeyDown("space"))
             {
                 if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour
                     justFlipped = true;
                 }
             }
-        }
+        
         else
         {
             if (playerInput == "dwwaw")
@@ -131,14 +132,6 @@ public class PlayerController : MonoBehaviour
                     playerInput += "d";
                 }
             }
-
-            
-            
-            
-            
-            
-            
-            
         }
     }
 
