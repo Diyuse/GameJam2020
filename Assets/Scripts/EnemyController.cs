@@ -208,4 +208,11 @@ public class EnemyController : MonoBehaviour
 
         return true;
     }
+
+    public void spawnPoint(int row, int col)
+    {
+        this.row = row;
+        this.col = col;
+        transform.position = new Vector3(row * tileSize, 2, col * tileSize);
+    }
 }

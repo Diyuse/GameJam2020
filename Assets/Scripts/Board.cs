@@ -37,31 +37,95 @@ public class Board : MonoBehaviour
     /// <summary>
     /// Creates a hard-coded grid
     /// </summary>
-    private void Awake()
-    {
+    public void GenerateLevel(bool isTutorial)
+    {   
+        if(!isTutorial){
+            boardIsFlipped = false;
+            gridSize = 16;
+            tileSize = 1;
+            startingRow = 0;
+            startingCol = 0;
+            myGrid = new GameObject[gridSize, gridSize];
+            myTiles = new Tile[gridSize, gridSize];
+            grid = GameObject.FindWithTag("Grid");
+
+            numberOfFlags = 2;
+            flags = new Flag[numberOfFlags];
+
+            var reader = new StreamReader(File.OpenRead("map.csv"));
+
+            //Setting up grid
+            for (int i = 0; i < gridSize; i++)
+            {
+                var line = reader.ReadLine();
+
+
+                for (int j = 0; j < gridSize; j++)
+                {
+
+                    var values = line.Split(',');
+
+                    //Getting the position to place the tile
+                    position = new Vector3(i * tileSize, tileSize / 2, j * tileSize);
+
+                    //Creating the tile
+                    myGrid[i, j] = Instantiate(tilePrefab, position, Quaternion.identity, origin) as GameObject;
+
+                    //Changing the name
+                    myGrid[i, j].name = String.Format("Tile {0}:{1}", i, j);
+
+                    //Setting the status to unchanged as default
+                    myTiles[i, j] = new Tile(i, j);
+
+                    if (values[j].Equals("1"))
+                    {
+                        LowerTile(i, j);
+                    }
+
+                    else if (values[j].Equals("2"))
+                    {
+                        DeleteTile(i, j);
+
+                    }
+                }
+            }
+            //Testing adding flags
+
+                Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
+                Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
+
+                flags[0] = firstFlag;
+                flags[1] = secondFlag;
+
+                //Setting the starting position of the player
+                player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
+            
+        }
+    
+    // tutorial
+    else{
         boardIsFlipped = false;
-        gridSize = 16;
+        gridSize = 3;
         tileSize = 1;
-        startingRow = 0;
+        startingRow = 2;
         startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
 
-        numberOfFlags = 2;
+        numberOfFlags = 1;
         flags = new Flag[numberOfFlags];
 
-        var reader = new StreamReader(File.OpenRead("map.csv"));
+        var reader = new StreamReader(File.OpenRead("tutorial.csv"));
 
         //Setting up grid
         for (int i = 0; i < gridSize; i++)
         {
             var line = reader.ReadLine();
 
-
             for (int j = 0; j < gridSize; j++)
             {
-
+            
                 var values = line.Split(',');
 
                 //Getting the position to place the tile
@@ -84,21 +148,18 @@ public class Board : MonoBehaviour
                 else if (values[j].Equals("2"))
                 {
                     DeleteTile(i, j);
-
                 }
             }
         }
         //Testing adding flags
 
-            Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
-            Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
+        Flag firstFlag = new Flag(0, 2, Flag.FlagStatus.UP, this);
 
-            flags[0] = firstFlag;
-            flags[1] = secondFlag;
+        flags[0] = firstFlag;
 
-            //Setting the starting position of the player
-            player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
-        
+        //Setting the starting position of the player
+        player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
+        }        
     }
 
     /// <summary>

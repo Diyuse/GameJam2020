@@ -14,9 +14,9 @@ public class MainMenu : MonoBehaviour
     private void OnEnable()
     {
         startButton.onClick.AddListener(StartGame);
-        continueButton.onClick.AddListener(StartGame);
-        optionsButton.onClick.AddListener(StartGame);
-        exitButton.onClick.AddListener(StartGame);
+        continueButton.onClick.AddListener(ContinueGame);
+        optionsButton.onClick.AddListener(Options);
+        exitButton.onClick.AddListener(Exit);
     }
 
     private void OnDisable()
@@ -34,7 +34,7 @@ public class MainMenu : MonoBehaviour
 
     private void StartGame()
     {
-        // GoToLevel("MainLevel");
+        GoToLevel("LevelSelector");
     }
 
     private void ContinueGame()
