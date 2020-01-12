@@ -87,7 +87,7 @@ public class Board : MonoBehaviour
                    
                 }
             }
-
+        }
             //Testing adding flags
 
             Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
@@ -98,7 +98,7 @@ public class Board : MonoBehaviour
 
             //Setting the starting position of the player
             player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
-        }
+        
     }
 
     /// <summary>
