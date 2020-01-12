@@ -948,6 +948,13 @@ MonoBehaviour:
   player: {fileID: 1179579028}
   flagPrefab: {fileID: 1649193076768809238, guid: 835da36fed1907d4f88f153c567e659f,
     type: 3}
+  tileBaseMaterial: {fileID: 2100000, guid: a217d4da08d59da4f8521c19b835ce34, type: 2}
+  tileBorderMaterial: {fileID: 2100000, guid: 946f8bd28f6c600459aecb3a4486eaf9, type: 2}
+  tileFlippedBaseMaterial: {fileID: 2100000, guid: 40bfe5e33852e7140a331db169c620a5,
+    type: 2}
+  tileFlippedBorderMaterial: {fileID: 2100000, guid: d60515e9349e2f54bb7a8f661b1f696a,
+    type: 2}
+  tileBaseColor: {fileID: 0}
 --- !u!1 &1999578854
 GameObject:
   m_ObjectHideFlags: 0

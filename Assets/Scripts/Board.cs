@@ -24,6 +24,11 @@ public class Board : MonoBehaviour
     [Header("Others")] 
     [SerializeField] public GameObject player;
     [SerializeField] public GameObject flagPrefab;
+    [SerializeField] public Material tileBaseMaterial;
+    [SerializeField] public Material tileBorderMaterial;
+    [SerializeField] public Material tileFlippedBaseMaterial;
+    [SerializeField] public Material tileFlippedBorderMaterial;
+    [SerializeField] public Material tileBaseColor;
 
     private Vector3 position;
 
@@ -40,6 +45,7 @@ public class Board : MonoBehaviour
     /// </summary>
     public void GenerateLevel(bool isTutorial)
     {
+        tileBaseColor = tileBaseMaterial;
         if (!isTutorial)
         {
             boardIsFlipped = false;
@@ -197,14 +203,16 @@ public class Board : MonoBehaviour
 
 
             Renderer rend = myGrid[row,col].GetComponent<Renderer>();
-            rend.material.color = Color.grey;
+            rend.material = tileFlippedBorderMaterial;
+            tileBaseMaterial = tileFlippedBaseMaterial;
 
         } else if (myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
         {
             myGrid[row,col].transform.Translate(0,tileSize,0);
             myTiles[row, col].SetStatus(Tile.TileStatus.UNCHANGED);
             Renderer rend = myGrid[row, col].GetComponent<Renderer>();
-            rend.material.color = Color.cyan;
+            rend.material = tileBorderMaterial;
+            tileBaseMaterial = tileBaseColor;
         }
     }
 
