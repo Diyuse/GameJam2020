@@ -40,10 +40,11 @@ public class Board : MonoBehaviour
     private void Awake()
     {
         boardIsFlipped = false;
-        gridSize = 16;
-        tileSize = 1;
-        startingRow = 0;
-        startingCol = 0;
+
+        // gridSize = 8;
+        // tileSize = 1;
+        // startingRow = 0;
+        // startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
