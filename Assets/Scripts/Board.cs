@@ -90,7 +90,7 @@ public class Board : MonoBehaviour
         }
         //Testing adding flags
 
-            Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
+            Flag firstFlag = new Flag(15, 15, Flag.FlagStatus.UP, this);
             Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
 
             flags[0] = firstFlag;
@@ -117,7 +117,7 @@ public class Board : MonoBehaviour
 
 
             Renderer rend = myGrid[row,col].GetComponent<Renderer>();
-            rend.material.color = Color.red;
+            rend.material.color = Color.grey;
 
         } else if (myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
         {
