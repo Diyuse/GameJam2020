@@ -84,11 +84,11 @@ public class Board : MonoBehaviour
                 else if (values[j].Equals("2"))
                 {
                     DeleteTile(i, j);
-                   
+
                 }
             }
-
-            //Testing adding flags
+        }
+        //Testing adding flags
 
             Flag firstFlag = new Flag(7, 7, Flag.FlagStatus.UP, this);
             Flag secondFlag = new Flag(0, 0, Flag.FlagStatus.DOWN, this);
@@ -98,7 +98,7 @@ public class Board : MonoBehaviour
 
             //Setting the starting position of the player
             player.transform.position = origin.position + new Vector3(startingRow, tileSize + 1, startingCol);
-        }
+        
     }
 
     /// <summary>

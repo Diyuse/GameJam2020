@@ -48,13 +48,17 @@ public class Flag
     /// <summary>
     /// Attempt to collect the flag
     /// </summary>
-    public bool CollectFlag(){
-        if (collected) return false;
+    public bool CollectFlag()
+    {
+        if (collected)
+        {
+            return false;
+        }
         collected = true;
 
         // Make the flag invisible, animation is welcome
         GameObject.Destroy(this.flagGameObject);
-        
+
         return true;
     }
 }
