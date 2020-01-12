@@ -146,13 +146,14 @@ public class PlayerController : MonoBehaviour
         this.col = nextCol;
         this.row = nextRow;
 
-
+        // Enemy moves
         int[] newPos = enemyController.moveEnemy();
         if (newPos.Length > 0)
         {
             row = newPos[0];
             col = newPos[1];
         }
+
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
