@@ -42,8 +42,8 @@ public class Board : MonoBehaviour
         boardIsFlipped = false;
         gridSize = 16;
         tileSize = 1;
-        //startingRow = 0;
-        //startingCol = 0;
+        startingRow = 0;
+        startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
