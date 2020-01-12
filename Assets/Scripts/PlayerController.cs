@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject gameManager;
 
+    public GameObject bear;
 
     public enum Direction{
         NORTH,
@@ -126,15 +127,19 @@ public class PlayerController : MonoBehaviour
 
         switch (direction){
             case Direction.NORTH:
+                bear.transform.rotation = Quaternion.Euler(0,-90,0);
                 destination = new Vector3(-tileSize,0,0);
                 break;
             case Direction.SOUTH:
+                bear.transform.rotation = Quaternion.Euler(0,90,0);
                 destination = new Vector3(tileSize, 0, 0);
                 break;
             case Direction.EAST:
+                bear.transform.rotation = Quaternion.Euler(0,0,0);
                 destination = new Vector3(0, 0, tileSize);
                 break;
             case Direction.WEST:
+                bear.transform.rotation = Quaternion.Euler(0,180,0);
                 destination = new Vector3(0, 0, -tileSize);
                 break;
         }
@@ -203,6 +208,7 @@ public class PlayerController : MonoBehaviour
     /// Check if the player is on a flag
     /// </summary>
     public Flag IsOnFlag(){
+        // Debug.Log("CALLING");
 
         Flag.FlagStatus match;
         if (board.boardIsFlipped) match = Flag.FlagStatus.DOWN;
