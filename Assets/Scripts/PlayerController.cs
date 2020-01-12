@@ -73,17 +73,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Flip
-            if (Input.GetKeyDown("space"))
-            {
-                if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
-                {
-                    board.Flip();
-                    board.LowerTile(row, col);
-                    justFlipped = true;
-                }
-            }
-        
         else
         {
             if (playerInput == "dwwaw")
@@ -131,6 +120,16 @@ public class PlayerController : MonoBehaviour
                     Move(Direction.EAST);
                     playerInput += "d";
                 }
+            }
+        }
+        // Flip
+        if (Input.GetKeyDown("space"))
+        {
+            if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            {
+                board.Flip();
+                board.LowerTile(row, col);
+                justFlipped = true;
             }
         }
     }
