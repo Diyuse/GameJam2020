@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     
     public Canvas canvas;
 
+    public Board board;
+
     private void Awake(){
         canvas.enabled = false;
     }
@@ -21,6 +23,12 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown("q") || Input.GetKeyDown(KeyCode.Escape)){
             Quit();
+        }
+        else if (Input.GetKeyDown("t")){
+            board.GenerateLevel(true);
+        }
+        else if (Input.GetKeyDown("l")){
+            board.GenerateLevel(false);
         }
     }
 

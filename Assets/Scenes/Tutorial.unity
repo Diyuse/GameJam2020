@@ -468,6 +468,7 @@ GameObject:
   m_Component:
   - component: {fileID: 537718147}
   - component: {fileID: 537718146}
+  - component: {fileID: 537718148}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -490,6 +491,7 @@ MonoBehaviour:
   moveSpeed: 1
   moveVector: {x: 0, y: 0, z: 0}
   canvas: {fileID: 361574287}
+  board: {fileID: 0}
 --- !u!4 &537718147
 Transform:
   m_ObjectHideFlags: 0
@@ -504,6 +506,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &537718148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537718145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e337d7d09901ced4e95b10b541e3399b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardObject: {fileID: 1704866738}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e5ee250ad9aea4096e23dcdef7b605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTutorial: 1
   boardGameObject: {fileID: 1704866738}
   enemy: {fileID: 234027424}
   gameManager: {fileID: 537718145}

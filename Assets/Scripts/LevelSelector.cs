@@ -31,7 +31,8 @@ public class LevelSelector : MonoBehaviour
 
     private void Tutorial()
     {
-        GoToLevel("");
+        GoToLevel("Tutorial");
+        
     }
     
     private void Easy()
@@ -41,6 +42,6 @@ public class LevelSelector : MonoBehaviour
     
     private void Hard()
     {
-        GoToLevel("");
+        GoToLevel("Prototype");
     }
 }

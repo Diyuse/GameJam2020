@@ -31,9 +31,7 @@ public class EnemyController : MonoBehaviour
         x = rand.Next(gridSize);
         y = rand.Next(gridSize);
         tileSize = grid.tileSize;
-
-        transform.position = new Vector3(x * tileSize, 2, y * tileSize);
-
+        
         // Check valid
         while (!CheckIfValidMove(x, y)) {
             x = rand.Next(gridSize);
@@ -42,61 +40,106 @@ public class EnemyController : MonoBehaviour
 
         row = x;
         col = y;
-        
+
+        transform.position = new Vector3(x * tileSize, 2, y * tileSize);
+
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Moves enemy randomnly
+    /// </summary>
+    /// <returns></returns>
     public int[] moveEnemy()
     {
         playerCoord = playerController.GetPlayerCoords();
-        // Random move
-        switch (Move())
+        int[] enemyCoord = GetEnmCoords();
+
+
+        // Valid moves
+        List<PlayerController.Direction> validMoves = new List<PlayerController.Direction>();
+        List<PlayerController.Direction> directions = new List<PlayerController.Direction>();
+        int newRow = row;
+        int newCol = col;
+
+        if (row > 0 && CheckIfValidMove(row - 1, col)) validMoves.Add(PlayerController.Direction.NORTH);
+        if (row + 1 < gridSize && CheckIfValidMove(row + 1, col)) validMoves.Add(PlayerController.Direction.SOUTH);
+        if (col + 1 < gridSize && CheckIfValidMove(row, col + 1)) validMoves.Add(PlayerController.Direction.EAST);
+        if (col > 0 && CheckIfValidMove(row, col - 1)) validMoves.Add(PlayerController.Direction.WEST);
+        if (validMoves.Count != 0)
         {
-            case 0:
-                // Up
-                if (row > 0 && CheckIfValidMove(row - 1, col))
+            // Toward player
+            foreach (PlayerController.Direction dir in validMoves)
+            {
+                switch (dir)
                 {
-                    transform.Translate(-tileSize, 0, 0); //Move the player by the same amount as the tile size
-                    row--; //Keep track of the position of the player
+                    case PlayerController.Direction.NORTH:
+                        if (playerCoord[1] == enemyCoord[1] || playerCoord[0] < enemyCoord[0]) { 
+                            directions.Add(PlayerController.Direction.NORTH);
+                        }
+                        break;
+                    case PlayerController.Direction.SOUTH:
+                        if (playerCoord[1] == enemyCoord[1] || playerCoord[0] > enemyCoord[0])
+                        {
+                            directions.Add(PlayerController.Direction.SOUTH);
+                        }
+                        break;
+                    case PlayerController.Direction.EAST:
+                        if (playerCoord[0] == enemyCoord[0] || playerCoord[1] > enemyCoord[1])
+                        {
+                            directions.Add(PlayerController.Direction.EAST);
+                        }
+                        break;
+                    case PlayerController.Direction.WEST:
+                        if (playerCoord[0] == enemyCoord[0] || playerCoord[1] < enemyCoord[1])
+                        {
+                            directions.Add(PlayerController.Direction.WEST);
+                        }
+                        break;
                 }
-                break;
-
-            case 1:
-                // Down
-                if (row + 1 < gridSize && CheckIfValidMove(row + 1, col))
-                {
-                    transform.Translate(tileSize, 0, 0);
-                    row++;
-                }
-                break;
-
-            case 2:
-                // Left
-                if (col > 0 && CheckIfValidMove(row, col - 1))
-                {
-                    transform.Translate(0, 0, -tileSize);
-                    col--;
-                }
-                break;
-
-            case 3:
-                // Right
-                if (col + 1 < gridSize && CheckIfValidMove(row, col + 1))
-                {
-                    transform.Translate(0, 0, tileSize);
-                    col++;
-                }
-                break;
-
-            default:
-                break;
+            }
         }
 
-        // Check result
+        // Random move from possible dir
         System.Random rnd = new System.Random();
+        if (directions.Count > 0)
+        {
+            PlayerController.Direction dir = directions[rnd.Next(directions.Count)];
+
+            Vector3 destination = new Vector3(0, 0, 0);
+
+            switch (dir)
+            {
+                case PlayerController.Direction.NORTH:
+                    destination = new Vector3(-tileSize, 0, 0);
+                    newRow = row - 1;
+                    break;
+                case PlayerController.Direction.SOUTH:
+                    destination = new Vector3(tileSize, 0, 0);
+                    newRow = row + 1;
+                    break;
+                case PlayerController.Direction.EAST:
+                    destination = new Vector3(0, 0, tileSize);
+                    newCol = col + 1;
+                    break;
+                case PlayerController.Direction.WEST:
+                    destination = new Vector3(0, 0, -tileSize);
+                    newCol = col - 1;
+                    break;
+            }
+
+            // translate
+            transform.Translate(destination);
+
+            // update current position
+            col = newCol;
+            row = newRow;
+
+        }
+        
+        // Check result
         List<int[]> validTilePos = new List<int[]>();
 
-        // Valid spots to move
+        // Valid spots to move to
         for (int i=0; i < gridSize; i++)
         {
             for (int j=0; j < gridSize; j++)
@@ -113,6 +156,8 @@ public class EnemyController : MonoBehaviour
         {
             int[] tilePos = validTilePos[rnd.Next(validTilePos.Count)];
             playerController.transform.position = new Vector3(tilePos[0] * tileSize, 2, tilePos[1] * tileSize);
+            // Add effects
+
             return tilePos;
         }
         else return new int[] { };
@@ -128,17 +173,7 @@ public class EnemyController : MonoBehaviour
     {
         return new int[2] { row, col };
     }
-
-    /// <summary>
-    /// Choose a direction to move
-    /// </summary>
-    /// <returns></returns>
-    private int Move()
-    {
-        System.Random rand = new System.Random();
-        return rand.Next(4);
-    }
-
+    
 
     /// <summary>
     /// Valid tile to move to
@@ -172,5 +207,12 @@ public class EnemyController : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void spawnPoint(int row, int col)
+    {
+        this.row = row;
+        this.col = col;
+        transform.position = new Vector3(row * tileSize, 2, col * tileSize);
     }
 }

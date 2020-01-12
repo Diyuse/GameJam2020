@@ -6,6 +6,8 @@ using UnityEngine.XR;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private bool isTutorial;
+    private string playerInput;
     private int row;
     private int col;
     private int gridSize;
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        playerInput = "";
         board = boardGameObject.GetComponent<Board>();
         enemyController = enemy.GetComponent<EnemyController>();
 
@@ -46,33 +49,96 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // controls for moving
-        if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        if (!isTutorial)
         {
-            Move(Direction.NORTH); //(row - 1, col)
-
-        } else if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
-        {
-            Move(Direction.WEST); //(row, col-1)
-
-        } else if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
-        {
-            Move(Direction.SOUTH); //(row + 1, col)
-            
-        } else if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
-        {
-            Move(Direction.EAST); //(row, col + 1);
-        }
-
-        // Flip
-        if (Input.GetKeyDown("space"))
-        {
-            if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+            // controls for moving
+            if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
             {
-                board.Flip();
-                board.LowerTile(row, col);
-                justFlipped = true;
+                Move(Direction.NORTH); //(row - 1, col)
+
             }
+            else if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
+            {
+                Move(Direction.WEST); //(row, col-1)
+
+            }
+            else if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
+            {
+                Move(Direction.SOUTH); //(row + 1, col)
+
+            }
+            else if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
+            {
+                Move(Direction.EAST); //(row, col + 1);
+            }
+
+            // Flip
+            if (Input.GetKeyDown("space"))
+            {
+                if (board.myTiles[row, col].CurrentStatus != Tile.TileStatus.DELETED)
+                {
+                    board.Flip();
+                    board.LowerTile(row, col);
+                    justFlipped = true;
+                }
+            }
+        }
+        else
+        {
+            if (playerInput == "dwwaw")
+            {
+                if (Input.GetKeyDown("w"))
+                {
+                    Move(Direction.NORTH);
+                    playerInput += "w";
+                }
+            } else if (playerInput == "dwwa")
+            {
+                if (Input.GetKeyDown("w"))
+                {
+                    Move(Direction.NORTH);
+                    playerInput += "w";
+                }
+            } else if (playerInput == "dww")
+            {
+                if (Input.GetKeyDown("a"))
+                {
+                    Move(Direction.WEST);
+                    playerInput += "a";
+                }
+            } else
+            if (playerInput == "dw")
+            {
+                if (Input.GetKeyDown("w"))
+                {
+                    Move(Direction.NORTH);
+                    playerInput += "w";
+                }
+            } else
+            if (playerInput == "d")
+            {
+                if (Input.GetKeyDown("w"))
+                {
+                    Move(Direction.NORTH);
+                    playerInput += "w";
+                }
+            } else
+            if (playerInput == "")
+            {
+                if (Input.GetKeyDown("d"))
+                {
+                    Move(Direction.EAST);
+                    playerInput += "d";
+                }
+            }
+
+            
+            
+            
+            
+            
+            
+            
         }
     }
 
@@ -86,7 +152,8 @@ public class PlayerController : MonoBehaviour
         int nextCol = col;
 
         // Check for board bounds
-        switch (direction){
+        switch (direction)
+        {
             case Direction.NORTH:
                 nextRow--;
                 if (row <= 0) return;
@@ -106,16 +173,16 @@ public class PlayerController : MonoBehaviour
         }
 
         // Check if altitudes match
-        if (board.boardIsFlipped 
+        if (board.boardIsFlipped
             && board.myTiles[nextRow, nextCol].CurrentStatus != Tile.TileStatus.CHANGED)
             return;
 
         if (!board.boardIsFlipped
             && board.myTiles[nextRow, nextCol].CurrentStatus != Tile.TileStatus.UNCHANGED)
-            return;        
+            return;
 
         // valid moves
-        
+
         // attempt to remove the tile
         TileRemoval();
 
@@ -123,23 +190,24 @@ public class PlayerController : MonoBehaviour
         board.LowerTile(row, col);
 
         // destination position
-        Vector3 destination = new Vector3(0,0,0);
-
-        switch (direction){
+        Vector3 destination = new Vector3(0, 0, 0);
+        
+        switch (direction)
+        {
             case Direction.NORTH:
-                bear.transform.rotation = Quaternion.Euler(0,-90,0);
-                destination = new Vector3(-tileSize,0,0);
+                bear.transform.rotation = Quaternion.Euler(0, -90, 0);
+                destination = new Vector3(-tileSize, 0, 0);
                 break;
             case Direction.SOUTH:
-                bear.transform.rotation = Quaternion.Euler(0,90,0);
+                bear.transform.rotation = Quaternion.Euler(0, 90, 0);
                 destination = new Vector3(tileSize, 0, 0);
                 break;
             case Direction.EAST:
-                bear.transform.rotation = Quaternion.Euler(0,0,0);
+                bear.transform.rotation = Quaternion.Euler(0, 0, 0);
                 destination = new Vector3(0, 0, tileSize);
                 break;
             case Direction.WEST:
-                bear.transform.rotation = Quaternion.Euler(0,180,0);
+                bear.transform.rotation = Quaternion.Euler(0, 180, 0);
                 destination = new Vector3(0, 0, -tileSize);
                 break;
         }
@@ -151,13 +219,27 @@ public class PlayerController : MonoBehaviour
         this.col = nextCol;
         this.row = nextRow;
 
-
-        int[] newPos = enemyController.moveEnemy();
-        if (newPos.Length > 0)
+        if (!isTutorial)
         {
-            row = newPos[0];
-            col = newPos[1];
+            // Enemy moves
+            int[] newPos = enemyController.moveEnemy();
+            if (newPos.Length > 0)
+            {
+                row = newPos[0];
+                col = newPos[1];
+            }
         }
+        else
+        {
+            enemyController.spawnPoint(0,0);
+            if (this.row == 0 && this.col == 0)
+            {
+                row = 2;
+                col = 2;
+                transform.position = new Vector3(row * tileSize, 2, col * tileSize);
+            }
+        }
+
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
