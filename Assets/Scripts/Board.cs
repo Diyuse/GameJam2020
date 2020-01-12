@@ -27,8 +27,12 @@ public class Board : MonoBehaviour
     private Vector3 position;
 
     // Flags
-    private const int NUMBER_OF_FLAGS = 2;
-    public Flag[] flags = new Flag[NUMBER_OF_FLAGS];
+    private int numberOfFlags;
+    public Flag[] flags;
+
+    public int NumberOfFlags { get => numberOfFlags; }
+
+
 
     /// <summary>
     /// Creates a hard-coded grid
@@ -43,6 +47,9 @@ public class Board : MonoBehaviour
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
+
+        numberOfFlags = 2;
+        flags = new Flag[numberOfFlags];
 
         var reader = new StreamReader(File.OpenRead("map.csv"));
 

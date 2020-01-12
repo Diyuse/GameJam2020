@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private EnemyController enemyController;
     public GameObject enemy;
     
+    private int flagsCollected = 0;
 
     public GameObject gameManager;
 
@@ -193,11 +194,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public bool HasWonGame(){
         
-        foreach(Flag f in board.flags){
-            if (!f.Collected) return false;
-        }
-        Debug.Log("Win!");
-        return true;
+        if (this.flagsCollected == board.NumberOfFlags)
+            return true;
+        else return false;
     }
 
     /// <summary>
@@ -213,6 +212,7 @@ public class PlayerController : MonoBehaviour
             if (f.Col == this.col && f.Row == this.row 
                 && f.GetFlagStatus == match){
                 Debug.Log("On flag");
+                this.flagsCollected++;
                 return f;
             }
         }
