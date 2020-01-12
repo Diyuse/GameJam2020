@@ -42,8 +42,8 @@ public class Board : MonoBehaviour
         boardIsFlipped = false;
         gridSize = 16;
         tileSize = 1;
-        startingRow = 0;
-        startingCol = 0;
+        //startingRow = 0;
+        //startingCol = 0;
         myGrid = new GameObject[gridSize, gridSize];
         myTiles = new Tile[gridSize, gridSize];
         grid = GameObject.FindWithTag("Grid");
@@ -114,10 +114,17 @@ public class Board : MonoBehaviour
             
 
             myTiles[row, col].SetStatus(Tile.TileStatus.CHANGED);
+
+
+            Renderer rend = myGrid[row,col].GetComponent<Renderer>();
+            rend.material.color = Color.red;
+
         } else if (myTiles[row, col].CurrentStatus == Tile.TileStatus.CHANGED)
         {
             myGrid[row,col].transform.Translate(0,tileSize,0);
             myTiles[row, col].SetStatus(Tile.TileStatus.UNCHANGED);
+            Renderer rend = myGrid[row, col].GetComponent<Renderer>();
+            rend.material.color = Color.cyan;
         }
     }
 
