@@ -30,8 +30,17 @@ public class Flag
         this.flagStatus = fs;
 
         float tileSize = grid.tileSize;
-
-        Vector3 position = new Vector3(row* tileSize, tileSize/2 + tileSize, col*tileSize);
+        
+        Vector3 position = new Vector3();
+        switch(fs){
+        case FlagStatus.UP:
+            position = new Vector3(row* tileSize, tileSize/2 + tileSize, col*tileSize);
+            break;
+        case FlagStatus.DOWN:
+            position = new Vector3(row* tileSize, -1*(tileSize/2 + tileSize), col*tileSize);
+            break;
+        }
+        
         this.flagGameObject = GameObject.Instantiate(grid.flagPrefab, position, Quaternion.identity, grid.origin);
         
     }
@@ -39,12 +48,16 @@ public class Flag
     /// <summary>
     /// Attempt to collect the flag
     /// </summary>
-    public bool CollectFlag(){
-        if (collected) return false;
+    public bool CollectFlag()
+    {
+        if (collected)
+        {
+            return false;
+        }
         collected = true;
 
         // Make the flag invisible, animation is welcome
-        this.flagGameObject.SetActive(false);
+        GameObject.Destroy(this.flagGameObject);
 
         return true;
     }

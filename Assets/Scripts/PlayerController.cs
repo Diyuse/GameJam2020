@@ -19,9 +19,11 @@ public class PlayerController : MonoBehaviour
     private EnemyController enemyController;
     public GameObject enemy;
     
+    private int flagsCollected = 0;
 
     public GameObject gameManager;
 
+    public GameObject bear;
 
     public enum Direction{
         NORTH,
@@ -60,7 +62,6 @@ public class PlayerController : MonoBehaviour
         } else if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
         {
             Move(Direction.EAST); //(row, col + 1);
-        
         }
 
         // Flip
@@ -126,15 +127,19 @@ public class PlayerController : MonoBehaviour
 
         switch (direction){
             case Direction.NORTH:
+                bear.transform.rotation = Quaternion.Euler(0,-90,0);
                 destination = new Vector3(-tileSize,0,0);
                 break;
             case Direction.SOUTH:
+                bear.transform.rotation = Quaternion.Euler(0,90,0);
                 destination = new Vector3(tileSize, 0, 0);
                 break;
             case Direction.EAST:
+                bear.transform.rotation = Quaternion.Euler(0,0,0);
                 destination = new Vector3(0, 0, tileSize);
                 break;
             case Direction.WEST:
+                bear.transform.rotation = Quaternion.Euler(0,180,0);
                 destination = new Vector3(0, 0, -tileSize);
                 break;
         }
@@ -157,7 +162,8 @@ public class PlayerController : MonoBehaviour
         // pick up a flag
         Flag flag = IsOnFlag();
         if (flag != null) {
-            flag.CollectFlag();
+            if(!flag.CollectFlag())
+                Debug.Log("Cannot remove flag");
         }
 
         // check if won
@@ -194,17 +200,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public bool HasWonGame(){
         
-        foreach(Flag f in board.flags){
-            if (!f.Collected) return false;
-        }
-
-        return true;
+        if (this.flagsCollected == board.NumberOfFlags)
+            return true;
+        else return false;
     }
 
     /// <summary>
     /// Check if the player is on a flag
     /// </summary>
     public Flag IsOnFlag(){
+        // Debug.Log("CALLING");
 
         Flag.FlagStatus match;
         if (board.boardIsFlipped) match = Flag.FlagStatus.DOWN;
@@ -213,6 +218,8 @@ public class PlayerController : MonoBehaviour
         foreach(Flag f in board.flags){
             if (f.Col == this.col && f.Row == this.row 
                 && f.GetFlagStatus == match){
+                Debug.Log("On flag");
+                this.flagsCollected++;
                 return f;
             }
         }
